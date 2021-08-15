@@ -1,0 +1,26 @@
+{
+  "name": "web-scraping-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@wdio/cli": "^7.2.2",
+    "cheerio": "^1.0.0-rc.5",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "lodash": "^4.17.21",
+    "nodemon": "^2.0.12",
+    "puppeteer": "^8.0.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "selenium-webdriver": "^4.0.0-beta.2",
+    "sqlite3": "^5.0.2"
+  }
+}

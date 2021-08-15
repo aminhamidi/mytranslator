@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="./css/bootstrap.min.css"> -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      .main {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+      }
+
+      .pdf {
+        width: 80%;
+      }
+      #example1 {
+        height: 90vh;
+      }
+
+      /* .translate div {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        } */
+
+      #textarea {
+        direction: ltr;
+      }
+      #result_google,
+      #result_tarjome {
+        direction: rtl;
+        font-family: "Amiri", serif;
+        /* font-size: 1.4rem; */
+      }
+
+      .translate textarea {
+        width: 80%;
+      }
+
+      .translate .submit {
+        margin: auto;
+      }
+
+      .bttn {
+        border: 2px solid black;
+        padding: 5px 15px;
+        border-radius: 5px;
+      }
+    </style>
+    <div class="cunter"></div>
+    <div class="main">
+      <div class="pdf">
+        <div id="example1"></div>
+      </div>
+      <div class="translate">
+        <textarea name="textarea" id="textarea" cols="100" rows="7"></textarea>
+        <div>
+          <button class="submit bttn">translate</button>
+        </div>
+        <textarea
+          name="result_google"
+          id="result_google"
+          cols="100"
+          rows="9"
+        ></textarea>
+        <textarea
+          name="result_tarjome"
+          id="result_tarjome"
+          cols="50"
+          rows="9"
+        ></textarea>
+      </div>
+    </div>
+    <script src="./jquery-3.5.1.min.js"></script>
+    <!-- <script src="./js/bootstrap.bundle.min.js"></script> -->
+    <script>
+      let a =0;
+      $(".submit").click(function () {
+        a++;
+        $(".cunter").html(a);
+        $("#result_tarjome,#result_google").text("");
+        $("#result_tarjome,#result_google").html("");
+        $.post(
+          "http://localhost:3000/translate/google",
+          { data: $("#textarea").val() },
+          function (d) {
+            $("#result_google").html(d);
+          }
+        );
+
+        $.post(
+          "http://localhost:3000/translate/tarjome",
+          { data: $("#textarea").val() },
+          function (d) {
+            $("#result_tarjome").html(d);
+          }
+        );
+      });
+    </script>
+    <script src="./pdfobject.js"></script>
+    <script>
+      PDFObject.embed(
+        "http://localhost:3000/pdf/?name=<%= Src %>",
+        "#example1"
+      );
+    </script>
+  </body>
+</html>
