@@ -5,7 +5,7 @@ const path = require('path')
 const cors = require('cors')
 //const sqlite3 = require('sqlite3').verbose();
 const _ = require('lodash');
-
+const { argv } = require('process');
 
 
 
@@ -28,7 +28,7 @@ app.use(express.static('./PDFObject/'))
 
 app.get('/', function (req, res) {
     res.render('index', {
-        Src: fs.readdirSync('./pdf')[0]
+        Src: fs.readdirSync('./pdf')[argv[2]]
     });
 });
 
