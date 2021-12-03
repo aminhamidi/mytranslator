@@ -43,7 +43,7 @@ app.get('/pdf/', function (req, res) {
 
 async function translator() {
 
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ headless: false });
 
     /***************************************************************************************/
     const page_google = await browser.newPage();
@@ -58,7 +58,7 @@ async function translator() {
         }
     });
 
-    await page_google.goto('https://translate.google.com/?hl=en&tab=rT1&sl=en&tl=fa&op=translate');
+    await page_google.goto('https://translate.google.com/?hl=en&tab=rT1&sl=en&tl=fa&op=translate'/* , { waitUntil: 'load', timeout: 0 } */);
 
     await page_google.waitForSelector('body');
 
@@ -78,7 +78,7 @@ async function translator() {
     });
 
 
-    await page_tarjome.goto('https://targoman.ir/');
+    await page_tarjome.goto('https://targoman.ir/'/* , { waitUntil: 'load', timeout: 0 } */);
 
     await page_tarjome.waitForSelector('body');
 
@@ -90,7 +90,7 @@ async function translator() {
 
         const date = new Date;
 
-        console.log(date.getMinutes(),':',date.getSeconds(), "submited.", '\r\n*-------------------------------------*');
+        console.log("Minutes:Seconds ", date.getMinutes(), ':', date.getSeconds(), "submited.", '\r\n*-------------------------------------*');
 
         (async () => {
 
@@ -100,6 +100,14 @@ async function translator() {
 
             arr.forEach(element => {
                 temp += element + " ";
+            });
+
+            arr = temp.split(/\.|\. /);
+
+            temp = "";
+
+            arr.forEach((element, index) => {
+                index != arr.length - 1 ? temp += element + ".\n" : arr[index] = null;
             });
 
             await page_google.waitForSelector('.er8xn');
@@ -113,18 +121,43 @@ async function translator() {
             // }, temp);
 
 
-            await page_google.waitForSelector('span[jsname="W297wb"]');
+            // روش قدیمی 
+            /* // await page_google.waitForSelector('span[jsname="W297wb"]');
 
-            let newUrls = await page_google.evaluate(() => {
-                let results = "";
-                let items = document.querySelectorAll('span[jsname="W297wb"]');
-                items.forEach((item) => {
-                    results += item.innerHTML + " ";
-                });
-                return results;
+            // let newUrls = await page_google.evaluate(() => {
+            //     let results = "";
+            //     let items = document.querySelectorAll('span[jsname="W297wb"]');
+            //     items.forEach((item) => {
+            //         results += item.innerHTML + " ";
+            //     });
+            //     return results;
+            // }); */
+
+
+            await page_google.waitForSelector('div[jsname="coXp1b"]');
+            // await page_google.waitForSelector('div[jsname="gLFymd"]');
+            // await page_google.waitForTimeout(5000)
+
+            let str_temp = '';
+            let teranslated = await page_google.evaluate(() => {
+                // let en = document.querySelectorAll('div[jsname="gLFymd"]');
+                let fa = document.querySelectorAll('div[jsname="coXp1b"]');
+                let arr_temp = [];
+                for (let index = 0; index < fa.length; index++) {
+                    arr_temp[index] = fa[index].innerText;
+                }
+                return arr_temp;
             });
 
-            res.send(newUrls);
+            for (let index = 0; index < arr.length; index++) {
+                arr[index] != null || undefined ?
+                    str_temp +=
+                    arr[index] + '\n' +
+                    Number(index + 1) + "-" + teranslated[index * 2] + '\n' +
+                    Number(index + 1) + "-" + teranslated[index * 2 + 1] + '\n' : null;
+            }
+
+            res.send(str_temp);
 
             await page_google.waitForSelector('button[jsname="X5DuWc"]');
 
@@ -138,7 +171,7 @@ async function translator() {
 
         const date = new Date;
 
-        console.log(date.getMinutes(),':',date.getSeconds(),"submited.", '\r\n*-------------------------------------*');
+        console.log("Minutes:Seconds ", date.getMinutes(), ':', date.getSeconds(), "submited.", '\r\n*-------------------------------------*');
 
         (async () => {
 
@@ -152,6 +185,13 @@ async function translator() {
                 temp += element + " ";
             });
 
+            arr = temp.split(". ");
+
+            temp = "";
+
+            arr.forEach((element, index) => {
+                index != arr.length - 1 ? temp += Number(index + 1) + '-' + element + ".\n" : temp += "";
+            });
 
             await page_tarjome.click('.src .content');
 
@@ -160,10 +200,12 @@ async function translator() {
             await page_tarjome.waitForSelector('.tgt .content > span');
             let newUrls = await page_tarjome.evaluate(() => {
                 let results = "";
-                let items = document.querySelectorAll('.tgt .content > span');
-                items.forEach((item) => {
-                    results += item.innerHTML + " ";
-                });
+                let items = document.querySelector('.tgt .content');
+                results = items.innerText;
+                // results
+                // items.forEach((item) => {
+                //     results += item.innerHTML + " ";
+                // });
                 return results;
             });
 

@@ -1,0 +1,10 @@
+@font-face {
+  font-family: Vazir;
+  src: url("../vazir/Vazir-Variable.eot");
+  src: url("../vazir/Vazir-Variable.eot?#iefix") format("embedded-opentype"),
+    url("../vazir/Vazir-Variable.woff2") format("woff2"),
+    url("../vazir/Vazir-Variable.woff") format("woff"),
+    url("../vazir/Vazir-Variable.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
