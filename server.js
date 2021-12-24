@@ -159,9 +159,13 @@ async function translator() {
 
             res.send(str_temp);
 
-            await page_google.waitForSelector('button[jsname="X5DuWc"]');
+            // await page_google.waitForSelector('button[jsname="X5DuWc"]');
 
-            await page_google.click('button[jsname="X5DuWc"]');
+            // await page_google.click('button[jsname="X5DuWc"]');
+
+            await page_google.waitForSelector('button[aria-label="Clear source text"]');
+
+            await page_google.click('button[aria-label="Clear source text"]');
 
         })();
 
